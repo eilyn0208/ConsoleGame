@@ -1,27 +1,32 @@
 import React from "react";
 
-function RightControl() {
+function RightControl({ handleSelection }) {
+  const ActionButton = (cx, cy, label) => (
+    <g 
+      style={{ cursor: "pointer" }} 
+      onClick={() => handleSelection(label)}
+      className="hover:brightness-125"
+    >
+      <circle cx={cx} cy={cy} r="15" fill="#333" />
+      <text x={cx} y={cy + 5} textAnchor="middle" fontSize="12" fill="white" fontWeight="bold" style={{ pointerEvents: "none" }}>
+        {label}
+      </text>
+    </g>
+  );
+
   return (
-    <svg viewBox="10 30 160 220" width="140" height="220" xmlns="http://www.w3.org/2000/svg">
-      {/* Body */}
-      <rect x="10" y="20" width="160" height="220" rx="20" fill="#ff2c2c" />
+    <svg viewBox="0 0 160 240" width="140" height="220" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="160" height="240" rx="40" fill="#ff4d4d" />
 
-      {/* Analog stick - Centro en 90 */}
-      <circle cx="90" cy="180" r="26" fill="#CCCCCC" />
-      <circle cx="90" cy="180" r="18" fill="#AAAAAA" />
+      {/*botones XYAB */}
+      {ActionButton(80, 55, "X")}
+      {ActionButton(80, 105, "B")}
+      {ActionButton(105, 80, "A")}
+      {ActionButton(55, 80, "Y")}
 
-      {/* Botones XYAB alineados al centro 90 */}
-      <circle cx="90" cy="76" r="13" fill="#CCCCCC" />
-      <text x="90" y="81" textAnchor="middle" fontSize="11" fill="#2255CC" fontFamily="sans-serif" fontWeight="bold">X</text>
-
-      <circle cx="90" cy="124" r="13" fill="#CCCCCC" />
-      <text x="90" y="129" textAnchor="middle" fontSize="11" fill="#DDAA00" fontFamily="sans-serif" fontWeight="bold">B</text>
-
-      <circle cx="116" cy="100" r="13" fill="#CCCCCC" />
-      <text x="116" y="105" textAnchor="middle" fontSize="11" fill="#CC2222" fontFamily="sans-serif" fontWeight="bold">A</text>
-
-      <circle cx="64" cy="100" r="13" fill="#CCCCCC" />
-      <text x="64" y="105" textAnchor="middle" fontSize="11" fill="#228833" fontFamily="sans-serif" fontWeight="bold">Y</text>
+      {/*stick inferior */}
+      <circle cx="80" cy="170" r="25" fill="#333" />
+      <circle cx="80" cy="170" r="18" fill="#555" />
     </svg>
   );
 }

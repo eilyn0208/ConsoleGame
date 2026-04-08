@@ -1,21 +1,30 @@
 import React from "react";
 
-function LeftControl() {
+function LeftControl({ handleDirection }) {
+  const DirectionButton = (cx, cy, dir, arrow) => (
+    <g 
+      style={{ cursor: "pointer" }} 
+      onClick={() => handleDirection(dir)}
+      className="hover:brightness-125"
+    >
+      <circle cx={cx} cy={cy} r="15" fill="#333" />
+      <path d={arrow} fill="white" transform={`translate(${cx - 5}, ${cy - 5}) scale(0.8)`} />
+    </g>
+  );
+
   return (
-    <svg viewBox="0 30 160 220" width="140" height="220" xmlns="http://www.w3.org/2000/svg">
-      {/* Body */}
-      <rect x="0" y="20" width="160" height="220" rx="20" fill="#2cdcff" />
+    <svg viewBox="0 0 160 240" width="140" height="220" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="160" height="240" rx="40" fill="#2cdcff" />
+      
+      {/* stick superior */}
+      <circle cx="80" cy="70" r="25" fill="#333" />
+      <circle cx="80" cy="70" r="18" fill="#555" />
 
-      {/* Analog stick - Centrado en 80 */}
-      <circle cx="80" cy="90" r="26" fill="#CCCCCC" />
-      <circle cx="80" cy="90" r="18" fill="#AAAAAA" />
-
-      {/* D-Pad vertical */}
-      <rect x="69" y="148" width="22" height="60" rx="4" fill="#CCCCCC" />
-      {/* D-Pad horizontal */}
-      <rect x="50" y="167" width="60" height="22" rx="4" fill="#CCCCCC" />
-      {/* D-Pad center */}
-      <rect x="69" y="167" width="22" height="22" rx="2" fill="#BBBBBB" />
+      {/* Direction pad para mover el cursor */}
+      {DirectionButton(80, 135, "UP", "M5 2 L8 8 L2 8 Z")}
+      {DirectionButton(80, 185, "DOWN", "M5 8 L8 2 L2 2 Z")}
+      {DirectionButton(55, 160, "LEFT", "M2 5 L8 2 L8 8 Z")}
+      {DirectionButton(105, 160, "RIGHT", "M8 5 L2 2 L2 8 Z")}
     </svg>
   );
 }
