@@ -13,8 +13,8 @@ function LeftControl({ handleDirection }) {
   );
 
   return (
-    <svg viewBox="0 0 160 240" width="140" height="220" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="0" width="160" height="240" rx="40" fill="#2cdcff" />
+    <svg viewBox="0 0 160 320" width="140" height="320" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="-15" width="160" height="350" rx="30" fill="#2cdcff" />
       
       {/* stick superior */}
       <circle cx="80" cy="70" r="25" fill="#333" />
