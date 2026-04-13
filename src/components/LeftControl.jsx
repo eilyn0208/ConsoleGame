@@ -1,32 +1,32 @@
-import React from "react";
+import React from "react"; // esta linea es para 
 
-function LeftControl({ handleDirection }) {
-  const DirectionButton = (cx, cy, dir, arrow) => (
-    <g 
-      style={{ cursor: "pointer" }} 
-      onClick={() => handleDirection(dir)}
-      className="hover:brightness-125"
+function LeftControl({ handleDirection }) { // El componente LeftControl recibe una prop handleDirection, que es una función que se encarga de manejar las acciones de dirección (arriba, abajo, izquierda, derecha) para mover el cursor en la cuadrícula de selección de Pokémon. Este componente se encarga de mostrar un control direccional con botones para cada dirección, y al hacer clic en cada botón, se llama a la función handleDirection con la dirección correspondiente como argumento para actualizar la posición del cursor en la cuadrícula y permitir al jugador navegar por los Pokémon disponibles para seleccionar.
+  const DirectionButton = (cx, cy, dir, arrow) => ( // Esta función es un componente auxiliar que se encarga de crear un botón direccional para cada dirección (arriba, abajo, izquierda, derecha). Recibe como argumentos las coordenadas cx y cy para posicionar el botón en la pantalla, dir para indicar la dirección que representa el botón, y arrow para definir la forma del ícono de flecha que se muestra dentro del botón. Al hacer clic en el botón, se llama a la función handleDirection con la dirección correspondiente para actualizar la posición del cursor en la cuadrícula de selección de Pokémon.
+    <g  // Este bloque es el contenedor del botón direccional, con un estilo de cursor pointer para indicar que es interactivo, un evento onClick que llama a la función handleDirection con la dirección correspondiente cuando se hace clic en el botón, y una clase hover para aplicar un efecto de brillo al pasar el cursor sobre el botón. Dentro del bloque, se dibuja un círculo para representar el botón y un path para mostrar la flecha que indica la dirección del botón.
+      style={{ cursor: "pointer" }}  // Estilo para cambiar el cursor a pointer cuando se pasa sobre el botón, indicando que es interactivo y se puede hacer clic en él.
+      onClick={() => handleDirection(dir)} // Evento onClick que llama a la función handleDirection con la dirección correspondiente (dir) cuando se hace clic en el botón, lo que permite actualizar la posición del cursor en la cuadrícula de selección de Pokémon según la dirección seleccionada por el jugador.
+      className="hover:brightness-125" // Clase de Tailwind CSS para aplicar un efecto de brillo al pasar el cursor sobre el botón, lo que mejora la experiencia visual y hace que el botón sea más atractivo e interactivo para el jugador.
     >
-      <circle cx={cx} cy={cy} r="15" fill="#333" />
-      <path d={arrow} fill="white" transform={`translate(${cx - 5}, ${cy - 5}) scale(0.8)`} />
+      <circle cx={cx} cy={cy} r="15" fill="#333" /> {/* Este bloque es un círculo que representa el botón direccional, con un centro en las coordenadas cx y cy, un radio de 15 píxeles y un color de relleno gris oscuro para darle un aspecto sólido y visible en la interfaz. */}
+      <path d={arrow} fill="white" transform={`translate(${cx - 5}, ${cy - 5}) scale(0.8)`} /> {/* Este bloque es un path que dibuja la flecha dentro del botón direccional, utilizando la forma definida por el argumento arrow, con un color de relleno blanco para contrastar con el fondo del botón, y una transformación para posicionar y escalar la flecha dentro del círculo del botón de manera adecuada. Esto permite que el jugador identifique claramente la dirección que representa cada botón direccional en la interfaz. */}
     </g>
   );
 
   return (
-    <svg viewBox="0 0 160 320" width="140" height="320" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="-15" width="160" height="350" rx="30" fill="#2cdcff" />
+    <svg viewBox="0 0 160 320" width="140" height="320" xmlns="http://www.w3.org/2000/svg"> {/* Este bloque es el contenedor principal del control izquierdo, con un tamaño de vista de 160x320 píxeles, un ancho de 140 píxeles y una altura de 320 píxeles. Dentro del bloque, se dibuja un rectángulo para representar la base del control y se utilizan los componentes auxiliares DirectionButton para crear los botones direccionales para cada dirección (arriba, abajo, izquierda, derecha). Esto permite que el jugador tenga un control visual e interactivo para navegar por la cuadrícula de selección de Pokémon en la pantalla. */}
+      <rect x="0" y="-15" width="160" height="350" rx="30" fill="#2cdcff" /> {/* Este bloque es un rectángulo que representa la base del control izquierdo, con una posición inicial en las coordenadas (0, -15), un ancho de 160 píxeles, una altura de 350 píxeles, bordes redondeados con un radio de 30 píxeles para darle un aspecto más suave y un color de relleno azul claro para que se destaque en la interfaz. */}
       
       {/* stick superior */}
-      <circle cx="80" cy="70" r="25" fill="#333" />
-      <circle cx="80" cy="70" r="18" fill="#555" />
+      <circle cx="80" cy="70" r="25" fill="#333" /> {/* Este bloque es un círculo que representa la base del stick superior del control izquierdo, con un centro en las coordenadas (80, 70), un radio de 25 píxeles y un color de relleno gris oscuro para darle un aspecto sólido y visible en la interfaz. Este círculo actúa como el área de movimiento del stick, permitiendo al jugador mover el cursor dentro de esta área para seleccionar diferentes Pokémon en la cuadrícula. */}
+      <circle cx="80" cy="70" r="18" fill="#555" /> {/* Este bloque es un círculo más pequeño que representa el stick en sí, con un centro en las mismas coordenadas (80, 70), un radio de 18 píxeles y un color de relleno gris medio para diferenciarlo de la base del stick. Este círculo se puede mover dentro del área del stick superior para indicar la dirección seleccionada por el jugador al navegar por la cuadrícula de selección de Pokémon. */}
 
       {/* Direction pad para mover el cursor */}
-      {DirectionButton(80, 135, "UP", "M5 2 L8 8 L2 8 Z")}
-      {DirectionButton(80, 185, "DOWN", "M5 8 L8 2 L2 2 Z")}
-      {DirectionButton(55, 160, "LEFT", "M2 5 L8 2 L8 8 Z")}
-      {DirectionButton(105, 160, "RIGHT", "M8 5 L2 2 L2 8 Z")}
+      {DirectionButton(80, 135, "UP", "M5 2 L8 8 L2 8 Z")} {/* Este bloque es un botón direccional para la dirección "UP" (arriba), con un centro en las coordenadas (80, 135), una forma de flecha definida por el argumento "M5 2 L8 8 L2 8 Z" que dibuja una flecha apuntando hacia arriba, y al hacer clic en este botón se llama a la función handleDirection con el argumento "UP" para mover el cursor hacia arriba en la cuadrícula de selección de Pokémon. */}
+      {DirectionButton(80, 185, "DOWN", "M5 8 L8 2 L2 2 Z")} {/* Este bloque es un botón direccional para la dirección "DOWN" (abajo), con un centro en las coordenadas (80, 185), una forma de flecha definida por el argumento "M5 8 L8 2 L2 2 Z" que dibuja una flecha apuntando hacia abajo, y al hacer clic en este botón se llama a la función handleDirection con el argumento "DOWN" para mover el cursor hacia abajo en la cuadrícula de selección de Pokémon. */}
+      {DirectionButton(55, 160, "LEFT", "M2 5 L8 2 L8 8 Z")} {/* Este bloque es un botón direccional para la dirección "LEFT" (izquierda), con un centro en las coordenadas (55, 160), una forma de flecha definida por el argumento "M2 5 L8 2 L8 8 Z" que dibuja una flecha apuntando hacia la izquierda, y al hacer clic en este botón se llama a la función handleDirection con el argumento "LEFT" para mover el cursor hacia la izquierda en la cuadrícula de selección de Pokémon. */}
+      {DirectionButton(105, 160, "RIGHT", "M8 5 L2 2 L2 8 Z")} {/* Este bloque es un botón direccional para la dirección "RIGHT" (derecha), con un centro en las coordenadas (105, 160), una forma de flecha definida por el argumento "M8 5 L2 2 L2 8 Z" que dibuja una flecha apuntando hacia la derecha, y al hacer clic en este botón se llama a la función handleDirection con el argumento "RIGHT" para mover el cursor hacia la derecha en la cuadrícula de selección de Pokémon. */}
     </svg>
   );
 }
 
-export default LeftControl;
+export default LeftControl; /* Exportamos el componente LeftControl para que pueda ser utilizado en otras partes de la aplicación, como en el componente principal App.jsx donde se maneja la lógica de selección de Pokémon y se pasan las funciones de manejo de dirección como props a este componente para permitir al jugador navegar por la cuadrícula de selección de Pokémon utilizando los botones direccionales del control izquierdo. Esto es esencial para la experiencia de juego, ya que permite al jugador interactuar con la interfaz y elegir su Pokémon para la batalla contra la CPU. */

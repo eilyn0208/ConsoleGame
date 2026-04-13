@@ -1,15 +1,15 @@
-import React from "react";
+import React from "react"; // esta linea es para importar la librería React, que es necesaria para crear componentes y manejar el estado en esta aplicación de selección de Pokémon. React nos permite construir una interfaz de usuario interactiva y dinámica, lo que es esencial para la experiencia de juego que estamos creando. Al importar React, podemos utilizar sus funcionalidades para definir componentes como LeftControl, RightControl, Screen, PokeDetails y GameScreen, y gestionar la lógica de selección de Pokémon y la interacción del usuario en la aplicación.
 
-function RightControl({ handleSelection }) {
-  const ActionButton = (cx, cy, label) => (
+function RightControl({ handleSelection }) { // El componente RightControl recibe una prop handleSelection, que es una función que se encarga de manejar las acciones de selección y cancelación para elegir el Pokémon y iniciar la batalla. Este componente se encarga de mostrar un control con botones para cada acción (X, Y, A, B) y un stick inferior, y al hacer clic en cada botón, se llama a la función handleSelection con la acción correspondiente como argumento para actualizar los estados myPokeSelection y pcPokeSelection en el componente principal App.jsx cada vez que el jugador presione el botón A (selección) o B (cancelación). Esto permite que el jugador seleccione su Pokémon, inicie la batalla contra la CPU, o cancele su selección para volver a elegir otro Pokémon si lo desea. 
+  const ActionButton = (cx, cy, label) => ( //
     <g 
-      style={{ cursor: "pointer" }} 
-      onClick={() => handleSelection(label)}
-      className="hover:brightness-125"
+      style={{ cursor: "pointer" }}  // Estilo para cambiar el cursor a pointer cuando se pasa sobre el botón, indicando que es interactivo y se puede hacer clic en él.
+      onClick={() => handleSelection(label)} // Evento onClick que llama a la función handleSelection con la acción correspondiente (label) cuando se hace clic en el botón, lo que permite actualizar los estados myPokeSelection y pcPokeSelection en el componente principal App.jsx cada vez que el jugador presione el botón A (selección) o B (cancelación). Esto permite que el jugador seleccione su Pokémon, inicie la batalla contra la CPU, o cancele su selección para volver a elegir otro Pokémon si lo desea.
+      className="hover:brightness-125" // Clase de Tailwind CSS para aplicar un efecto de brillo al pasar el cursor sobre el botón, lo que mejora la experiencia visual y hace que el botón sea más atractivo e interactivo para el jugador.
     >
-      <circle cx={cx} cy={cy} r="15" fill="#333" />
-      <text x={cx} y={cy + 5} textAnchor="middle" fontSize="12" fill="white" fontWeight="bold" style={{ pointerEvents: "none" }}>
-        {label}
+      <circle cx={cx} cy={cy} r="15" fill="#333" /> {/* Este bloque es un círculo que representa el botón de acción, con un centro en las coordenadas cx y cy, un radio de 15 píxeles y un color de relleno gris oscuro para darle un aspecto sólido y visible en la interfaz. Este círculo actúa como el área de interacción del botón, permitiendo al jugador hacer clic en él para realizar la acción correspondiente (selección o cancelación). */}
+      <text x={cx} y={cy + 5} textAnchor="middle" fontSize="12" fill="white" fontWeight="bold" style={{ pointerEvents: "none" }}> {/* Este bloque es un elemento de texto que muestra la etiqueta del botón (X, Y, A, B) centrada dentro del círculo del botón de acción. El atributo x establece la posición horizontal del texto en el centro del botón, y el atributo y establece la posición vertical del texto ligeramente por debajo del centro para que quede visualmente equilibrado dentro del círculo. El atributo textAnchor="middle" asegura que el texto esté centrado horizontalmente, mientras que fontSize, fill y fontWeight se utilizan para darle un estilo legible y destacado al texto dentro del botón. El estilo pointerEvents: "none" se aplica para evitar que el texto interfiera con los eventos de clic en el botón, asegurando que el jugador pueda hacer clic en cualquier parte del círculo para activar la acción correspondiente. */}
+        {label} {/* Este bloque es el contenido del elemento de texto, que muestra la etiqueta del botón (X, Y, A, B) que se pasa como argumento a la función ActionButton. Esto permite que cada botón de acción tenga su propia etiqueta distintiva para que el jugador pueda identificar claramente qué acción representa cada botón en la interfaz. */}
       </text>
     </g>
   );
@@ -19,16 +19,16 @@ function RightControl({ handleSelection }) {
       <rect x="0" y="-15" width="160" height="350" rx="30" fill="#ff4d4d" /> {/* Este bloque es el fondo del control, con un rectángulo rojo con bordes redondeados para simular la carcasa de un control retro  con posicion */}
 
       {/*botones XYAB */}
-      {ActionButton(80, 55, "X")}
-      {ActionButton(80, 105, "B")}
-      {ActionButton(105, 80, "A")}
-      {ActionButton(55, 80, "Y")}
+      {ActionButton(80, 55, "X")} {/* Este bloque es un botón de acción para la etiqueta "X", con un centro en las coordenadas (80, 55) y al hacer clic en este botón se llama a la función handleSelection con el argumento "X" para realizar la acción correspondiente (selección o cancelación) en el componente principal App.jsx. Esto permite que el jugador interactúe con el botón X para seleccionar su Pokémon, iniciar la batalla contra la CPU, o cancelar su selección según la lógica implementada en la función handleSelection. */}
+      {ActionButton(80, 105, "B")} {/* Este bloque es un botón de acción para la etiqueta "B", con un centro en las coordenadas (80, 105) y al hacer clic en este botón se llama a la función handleSelection con el argumento "B" para realizar la acción correspondiente (selección o cancelación) en el componente principal App.jsx. Esto permite que el jugador interactúe con el botón B para seleccionar su Pokémon, iniciar la batalla contra la CPU, o cancelar su selección según la lógica implementada en la función handleSelection. */}
+      {ActionButton(105, 80, "A")} {/* Este bloque es un botón de acción para la etiqueta "A", con un centro en las coordenadas (105, 80) y al hacer clic en este botón se llama a la función handleSelection con el argumento "A" para realizar la acción correspondiente (selección o cancelación) en el componente principal App.jsx. Esto permite que el jugador interactúe con el botón A para seleccionar su Pokémon, iniciar la batalla contra la CPU, o cancelar su selección según la lógica implementada en la función handleSelection. */}
+      {ActionButton(55, 80, "Y")} {/* Este bloque es un botón de acción para la etiqueta "Y", con un centro en las coordenadas (55, 80) y al hacer clic en este botón se llama a la función handleSelection con el argumento "Y" para realizar la acción correspondiente (selección o cancelación) en el componente principal App.jsx. Esto permite que el jugador interactúe con el botón Y para seleccionar su Pokémon, iniciar la batalla contra la CPU, o cancelar su selección según la lógica implementada en la función handleSelection. */}
 
       {/*stick inferior */}
-      <circle cx="80" cy="170" r="25" fill="#333" />
-      <circle cx="80" cy="170" r="18" fill="#555" />
+      <circle cx="80" cy="170" r="25" fill="#333" /> {/* Este bloque es un círculo que representa la base del stick inferior del control derecho, con un centro en las coordenadas (80, 170), un radio de 25 píxeles y un color de relleno gris oscuro para darle un aspecto sólido y visible en la interfaz. Este círculo actúa como el área de movimiento del stick, permitiendo al jugador mover el cursor dentro de esta área para seleccionar diferentes Pokémon en la cuadrícula. */}
+      <circle cx="80" cy="170" r="18" fill="#555" /> {/* Este bloque es un círculo más pequeño que representa el stick en sí, con un centro en las mismas coordenadas (80, 170), un radio de 18 píxeles y un color de relleno gris medio para diferenciarlo de la base del stick. Este círculo se puede mover dentro del área del stick inferior para indicar la dirección seleccionada por el jugador al navegar por la cuadrícula de selección de Pokémon. Esto permite que el jugador tenga un control visual e interactivo para seleccionar su Pokémon utilizando el stick inferior del control derecho. */}
     </svg>
   );
 }
 
-export default RightControl;
+export default RightControl;  /* Exportamos el componente RightControl para que pueda ser utilizado en otras partes de la aplicación, como en el componente principal App.jsx donde se maneja la lógica de selección de Pokémon y se pasan las funciones de manejo de selección como props a este componente para permitir al jugador seleccionar su Pokémon, iniciar la batalla contra la CPU, o cancelar su selección para volver a elegir otro Pokémon si lo desea. Esto es esencial para la experiencia de juego, ya que permite al jugador interactuar con la interfaz y tomar decisiones sobre qué Pokémon elegir para la batalla contra la CPU. */

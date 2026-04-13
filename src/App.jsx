@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import LeftControl from './components/LeftControl';
-import RightControl from './components/RightControl';
-import Screen from './components/Screen';
+import { useEffect, useState } from 'react'; // estamos importando los hooks useEffect y useState de React para manejar el estado y los efectos secundarios en nuestro componente principal App.jsx
+import LeftControl from './components/LeftControl'; // Importamos el componente LeftControl, que es el control direccional izquierdo de la consola, y se encarga de manejar las direcciones de movimiento para seleccionar los Pokémon en la pantalla.
+import RightControl from './components/RightControl'; // Importamos el componente RightControl, que es el control de acción derecho de la consola, y se encarga de manejar las acciones de selección y cancelación para elegir un Pokémon o volver a la selección.
+import Screen from './components/Screen'; // Importamos el componente Screen, que es la pantalla principal de la consola, y se encarga de mostrar la cuadrícula de Pokémon disponibles y resaltar el que está seleccionado por el jugador.
 import GameScreen from './components/GameScreen';
-import useFetch from './hooks/useFetch';
+import useFetch from './hooks/useFetch'; // Importamos el hook personalizado useFetch, que es una función que nos permite hacer peticiones HTTP de manera sencilla y manejar el estado de la carga, los datos obtenidos y los errores que puedan ocurrir durante la petición. En este caso, lo utilizamos para obtener la lista de Pokémon desde la API de PokéAPI y almacenarla en el estado de nuestro componente principal App.jsx para luego pasarla a los componentes hijos como props.
 
-// 1. Estilos de los tipos (puedes dejarlos aquí arriba, fuera del componente)
+// 1. Estilos de los tipos de Pokémon para mostrar en el componente PokeDetails, con un objeto que asigna a cada tipo un conjunto de clases de Tailwind CSS para darle un color de fondo y estilo acorde al tipo del Pokémon, lo que ayuda a identificar visualmente las características del Pokémon seleccionado.
 const typeStyles = {
   fire: 'bg-orange-500',
   water: 'bg-blue-500',
@@ -28,50 +28,51 @@ const typeStyles = {
 };
 
 // 2. Componente de Detalles 
-const PokeDetails = ({ actual }) => {
-  if (!actual || actual.length === 0) {
+const PokeDetails = ({ actual }) => { // El componente PokeDetails recibe una prop llamada actual, que es un array que contiene el Pokémon seleccionado por el jugador. Este componente se encarga de mostrar los detalles del Pokémon seleccionado, incluyendo su nombre, ID, sprites y lista de movimientos. Si no hay un Pokémon seleccionado, muestra un mensaje indicando que se debe seleccionar uno. 
+  if (!actual || actual.length === 0) { // Validación de que actual que significa el Pokémon seleccionado no esté vacío o sea nulo, para evitar errores al intentar acceder a sus propiedades. Si no hay un Pokémon seleccionado, se muestra un mensaje indicando que se debe seleccionar uno.
     return (
-      <div className="w-64 h-[450px] flex items-center justify-center bg-gray-800 text-gray-500 rounded-lg border-4 border-gray-700 font-mono text-center p-4">
-        <p className="animate-pulse">SELECT A POKÉMON</p>
+      <div className="w-64 h-[450px] flex items-center justify-center bg-gray-800 text-gray-500 rounded-lg border-4 border-gray-700 font-mono text-center p-4"> {/* Este bloque es el contenedor principal de los detalles del Pokémon, con un tamaño fijo, diseño de flexbox para centrar el contenido tanto vertical como horizontalmente, un fondo gris oscuro, texto gris claro, bordes redondeados para darle un aspecto más suave, un borde gris para delimitar el área de los detalles, una fuente monoespaciada para darle un estilo retro, texto centrado y padding para separar el contenido del borde */}
+        <p className="animate-pulse">SELECT A POKÉMON</p> {/* Esta linea es para mostrar el mensaje "SELECT A POKÉMON" con una animación de pulso para llamar la atención del usuario y indicar que debe seleccionar un Pokémon para ver sus detalles */}
       </div>
     );
   }
 
-  const pokemon = actual[0];
+  const pokemon = actual[0]; // Si hay un Pokémon seleccionado, se toma el primer elemento del array actual, que es el objeto con la información del Pokémon seleccionado, y se asigna a la variable pokemon para poder acceder a sus propiedades y mostrarlas en la interfaz de usuario. Esto se hace porque el componente PokeDetails espera recibir un array con un solo elemento, que es el Pokémon seleccionado, y al acceder a actual[0] obtenemos ese objeto para mostrar sus detalles en la pantalla.
 
   return (
-    <div className="w-64 bg-white p-4 rounded-lg shadow-2xl font-mono text-gray-800 border-4 border-gray-400">
-      <div className="border-b-2 border-gray-100 pb-2 mb-3">
-        <span className="text-[10px] font-bold text-gray-400 tracking-tighter">ID: {pokemon.id.toString().padStart(3, '0')}</span>
-        <h2 className="text-xl uppercase font-black text-center italic truncate tracking-tight">{pokemon.name}</h2>
+    <div className="w-64 bg-white p-4 rounded-lg shadow-2xl font-mono text-gray-800 border-4 border-gray-400"> {/* Este bloque es el contenedor principal de los detalles del Pokémon, con un tamaño fijo, fondo blanco para resaltar la información, padding para separar el contenido del borde, bordes redondeados para darle un aspecto más suave, una sombra para darle profundidad, una fuente monoespaciada para darle un estilo retro, texto gris oscuro para mejorar la legibilidad y un borde gris para delimitar el área de los detalles */}
+      <div className="border-b-2 border-gray-100 pb-2 mb-3"> {/* Este bloque es la cabecera de los detalles del Pokémon, con una línea divisoria en la parte inferior para separar la cabecera del resto del contenido, padding en la parte inferior para dar espacio a la línea divisoria y margin-bottom para separar la cabecera del resto del contenido */}
+        <span className="text-[10px] font-bold text-gray-400 tracking-tighter">ID: {pokemon.id.toString().padStart(3, '0')}</span> {/* Esta linea es para mostrar el ID del Pokémon, con un estilo de texto pequeño, negrita, color gris para darle un aspecto secundario y tracking-tighter para reducir el espacio entre caracteres, además de formatear el ID para que siempre tenga 3 dígitos, agregando ceros a la izquierda si es necesario */} 
+        <h2 className="text-xl uppercase font-black text-center truncate tracking-tight">{pokemon.name}</h2> {/* Esta linea es para mostrar el nombre del Pokémon, con un estilo de texto grande, mayúsculas, negrita, centrado, itálica para darle un aspecto destacado, truncate para truncar el texto si es muy largo y tracking-tight para reducir el espacio entre caracteres */}
       </div>
 
-      <div className="flex justify-around bg-neutral-100 rounded-md p-2 border border-gray-200 mb-3 shadow-inner">
-        <div className="flex flex-col items-center">
-          <img src={pokemon.sprites?.front_default} alt="front" className="w-20 h-20" style={{ imageRendering: 'pixelated' }} />
-          <span className="text-[9px] font-bold text-gray-400">FRONT</span>
+      <div className="flex justify-around bg--100 rounded-md p-2 border border-gray-200 mb-3 shadow-inner"> {/* Este bloque es el contenedor de los sprites del Pokémon, con un diseño de flexbox para distribuir los sprites de manera uniforme, un fondo gris claro para resaltar las imágenes, bordes redondeados para darle un aspecto más suave, padding para separar el contenido del borde, un borde gris para delimitar el área de los sprites, margin-bottom para separar esta sección del resto del contenido y una sombra interna para darle profundidad */}
+        <div className="flex flex-col items-center"> {/* Este bloque es el contenedor del sprite frontal del Pokémon, con un diseño de texto centrado para alinear la imagen y el texto debajo de ella */}
+          <img src={pokemon.sprites?.front_default} alt="front" className="w-20 h-20" style={{ imageRendering: 'pixelated' }} /> {/* Mostramos la imagen del sprite frontal del Pokémon, utilizando el operador de encadenamiento opcional para evitar errores si la propiedad sprites o front_default no existe, con un tamaño fijo de 20x20 píxeles y un estilo pixelado para darle un aspecto retro */}
+          <span className="text-[9px] font-bold text-gray-400">FRONT</span> {/* Esta linea es para mostrar la etiqueta "FRONT" debajo del sprite frontal, con un estilo de texto pequeño y un color gris para darle un aspecto secundario */}
         </div>
-        <div className="flex flex-col items-center">
-          <img src={pokemon.sprites?.back_default} alt="back" className="w-20 h-20" style={{ imageRendering: 'pixelated' }} />
-          <span className="text-[9px] font-bold text-gray-400">BACK</span>
+        <div className="flex flex-col items-center"> {/* Este bloque es el contenedor del sprite trasero del Pokémon, con un diseño de texto centrado para alinear la imagen y el texto debajo de ella */}
+          <img src={pokemon.sprites?.back_default} alt="back" className="w-20 h-20" style={{ imageRendering: 'pixelated' }} /> {/* Mostramos la imagen del sprite trasero del Pokémon, utilizando el operador de encadenamiento opcional para evitar errores si la propiedad sprites o back_default no existe, con un tamaño fijo de 20x20 píxeles y un estilo pixelado para darle un aspecto retro */}
+          <span className="text-[9px] font-bold text-gray-400">BACK</span> {/* Esta linea es para mostrar la etiqueta "BACK" debajo del sprite trasero, con un estilo de texto pequeño y un color gris para darle un aspecto secundario */}
         </div>
       </div>
 
-      <div className="flex gap-1 justify-center mb-4 flex-wrap">
-        {pokemon.types?.map((t, index) => (
-          <span key={index} className={`${typeStyles[t.type.name] || 'bg-gray-500'} text-white text-[10px] px-3 py-0.5 rounded-sm font-bold uppercase shadow-sm`}>
-            {t.type.name}
+      <div className="flex gap-1 justify-center mb-4 flex-wrap"> {/* Este bloque es el contenedor de los tipos del Pokémon, con un diseño de flexbox para distribuir los tipos de manera uniforme, un espacio entre los elementos para separarlos visualmente, justify-center para centrar los tipos horizontalmente, margin-bottom para separar esta sección del resto del contenido y flex-wrap para permitir que los tipos se envuelvan a la siguiente línea si no caben en una sola línea */}
+        {pokemon.types?.map((t, index) => ( /* Esta linea es para mostrar los tipos del Pokémon, utilizando el operador de encadenamiento opcional para evitar errores si la propiedad types no existe, y mapear cada tipo para crear un bloque con su nombre y estilo correspondiente */
+          <span key={index} className={`${typeStyles[t.type.name] || 'bg-gray-500'} text-white text-[10px] px-3 py-0.5 rounded-sm font-bold uppercase shadow-sm`}> {/* Estilos para cada tipo: se utiliza el objeto typeStyles para asignar un color de fondo específico según el tipo del Pokémon, con un color de texto blanco para resaltar el nombre del tipo, un tamaño de texto pequeño, padding para separar el texto del borde, bordes redondeados para darle un aspecto más suave, negrita para resaltar el nombre del tipo, mayúsculas para darle un estilo destacado y una sombra para darle profundidad */}
+            {t.type.name} {/* Esta linea es para mostrar el nombre del tipo del Pokémon, que se obtiene de la propiedad type.name del objeto t, y se muestra en mayúsculas para darle un estilo destacado */}
           </span>
         ))}
       </div>
 
       <div>
-        <h3 className="text-[10px] font-bold bg-black text-white px-2 py-0.5 mb-2 inline-block skew-x-[-10deg]">MOVESET & POWER</h3>
-        <ul className="h-32 overflow-y-auto text-[10px] pr-1 space-y-1">
-          {pokemon.moves?.slice(0, 10).map((m, index) => (
-            <li key={index} className="flex justify-between border-b border-gray-100 py-1 uppercase font-medium">
-              <span className="truncate mr-2">{m.move?.name.replace('-', ' ')}</span>
-              <span className="font-bold text-red-600 shrink-0">{m.attack} ATK</span>
+        <h3 className="text-[10px] font-bold bg-red-600 text-white px-2 py-0.5 mb-2 inline-block skew-x-[-10deg]">MOVES & POWER</h3> {/* Esta linea es para mostrar el título "MOVESET & POWER" encima de la lista de movimientos, con un estilo de texto pequeño, negrita, fondo negro para resaltar el título, texto blanco, padding para separar el texto del borde, margin-bottom para separar el título de la lista, display inline-block para que el fondo se ajuste al tamaño del texto y un efecto de skew para darle un estilo retro */}
+        <ul className="h-32 overflow-y-auto text-[10px] pr-1 space-y-1"> {/* Esta linea es para mostrar la lista de movimientos del Pokémon, con un alto fijo de 32 píxeles, desplazamiento vertical para mostrar más elementos si es necesario, un tamaño de texto pequeño, padding derecho para evitar que el texto toque el borde derecho y un espacio entre los elementos para separarlos visualmente */}
+          {/* esta linea es para mostrar la lista de movimientos del Pokémon siendo los 11 primeros movimientos*/}
+          {pokemon.moves?.slice(0, 10).map((m, index) => ( 
+            <li key={index} className="flex justify-between border-b border-gray-100 py-1 uppercase font-medium"> {/* Esta linea es para mostrar cada movimiento del Pokémon, con un diseño de flexbox para alinear el nombre y el poder, un borde inferior para separar los elementos, padding vertical para darle un aspecto más suave y texto en mayúsculas para darle un estilo destacado */}
+              <span className="truncate mr-2">{m.move?.name.replace('-', ' ')}</span> {/* Esta linea es para mostrar el nombre del movimiento, utilizando el operador de encadenamiento opcional para evitar errores si la propiedad move o name no existe, reemplazando los guiones por espacios para mejorar la legibilidad, con un estilo de texto truncado para evitar que el nombre del movimiento se desborde y un margin-right para separar el nombre del poder */}
+              <span className="font-bold text-red-600 shrink-0">{m.attack} ATK</span> {/* Esta linea es para mostrar el poder de ataque del movimiento, con un estilo de texto en negrita y un color rojo para resaltar su importancia, seguido de "ATK" para indicar que se refiere al ataque, y shrink-0 para evitar que el texto se reduzca si el nombre del movimiento es muy largo */}
             </li>
           ))}
         </ul>
@@ -82,79 +83,79 @@ const PokeDetails = ({ actual }) => {
 
 // 3. Componente Principal App
 function App() {
-  const url = 'https://pokeapi.co/api/v2/pokemon?limit=100&offset=0';
-  const { data } = useFetch(url);
-  const [pokemones, setPokemones] = useState([]);
-  const [position, setPosition] = useState(1); 
-  const [myPokeSelection, setMyPokeSelection] = useState(null);
-  const [pcPokeSelection, setPcPokeSelection] = useState(null);
+  const url = 'https://pokeapi.co/api/v2/pokemon?limit=100&offset=0'; // URL de la API de PokéAPI para obtener la lista de Pokémon, con un límite de 100 Pokémon y un offset de 0 para empezar desde el primer Pokémon. Esta URL se utiliza en el hook useFetch para hacer la petición y obtener los datos de los Pokémon que se mostrarán en la pantalla principal y en los detalles.
+  const { data } = useFetch(url); // Utilizamos el hook personalizado useFetch para hacer la petición a la URL de la API de PokéAPI y obtener los datos de los Pokémon. El hook devuelve un objeto con la propiedad data, que contiene la respuesta de la API una vez que se ha cargado correctamente. Estos datos se almacenan en el estado del componente principal App.jsx para luego ser pasados a los componentes hijos como props y mostrar la información de los Pokémon en la interfaz de usuario.
+  const [pokemones, setPokemones] = useState([]); // Estado para almacenar la lista de Pokémon obtenida de la API, inicialmente es un array vacío. Este estado se actualiza una vez que se han procesado los datos obtenidos de la API para incluir solo la información relevante de cada Pokémon, como su nombre, ID, tipos, sprites y movimientos con un poder de ataque aleatorio. Esta lista de Pokémon se utiliza para mostrar la cuadrícula de Pokémon en la pantalla principal y para mostrar los detalles del Pokémon seleccionado en el componente PokeDetails.
+  const [position, setPosition] = useState(1); // Estado para almacenar la posición actual del selector en la cuadrícula de Pokémon, inicialmente es 1. Este estado se actualiza cada vez que el jugador utiliza el control direccional para moverse por la cuadrícula, y se utiliza para determinar qué Pokémon está seleccionado en la pantalla principal y mostrar sus detalles en el componente PokeDetails. La posición se maneja como un número entero que representa el ID del Pokémon seleccionado, lo que facilita la búsqueda del Pokémon correspondiente en la lista de pokemones.
+  const [myPokeSelection, setMyPokeSelection] = useState(null); // Estado para almacenar el Pokémon seleccionado por el jugador, inicialmente es null. Este estado se actualiza cuando el jugador presiona el botón de selección (A) en el control derecho, y se utiliza para mostrar los detalles del Pokémon seleccionado en el componente PokeDetails y para iniciar la batalla en el componente GameScreen. El valor de este estado es un objeto que contiene la información del Pokémon seleccionado, como su nombre, ID, tipos, sprites y movimientos con un poder de ataque aleatorio.
+  const [pcPokeSelection, setPcPokeSelection] = useState(null); // Estado para almacenar el Pokémon seleccionado por la CPU, inicialmente es null. Este estado se actualiza de manera aleatoria cuando el jugador selecciona su Pokémon, y se utiliza para mostrar los detalles del Pokémon seleccionado por la CPU en el componente GameScreen y para iniciar la batalla contra el Pokémon seleccionado por el jugador. El valor de este estado es un objeto que contiene la información del Pokémon seleccionado por la CPU, como su nombre, ID, tipos, sprites y movimientos con un poder de ataque aleatorio.
 
-  const getRandomInt = (min, max) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min)) + Math.ceil(min));
+  const getRandomInt = (min, max) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min)) + Math.ceil(min)); // Función para generar un número entero aleatorio entre un mínimo y un máximo, inclusive. Esta función se utiliza para asignar un poder de ataque aleatorio a cada movimiento de los Pokémon, lo que añade un elemento de imprevisibilidad a las batallas en el componente GameScreen. El poder de ataque se genera como un número entero entre 20 y 98, lo que permite que cada movimiento tenga una variabilidad en su efectividad durante las batallas.
 
-  useEffect(() => {
-    if (data?.results) {
-      const plist = data.results.map((l) => fetch(l.url).then((res) => res.json()));
-      Promise.all(plist).then((values) => {
-        const saniData = values.map((e) => ({
-          name: e.name,
-          id: e.id,
-          types: e.types,
-          sprites: e.sprites,
-          moves: e.moves.map((m) => ({ ...m, attack: getRandomInt(20, 98) })),
+  useEffect(() => { // Utilizamos el hook useEffect para procesar los datos obtenidos de la API una vez que se han cargado correctamente. Este efecto se ejecuta cada vez que la variable data cambia, lo que ocurre cuando se obtiene la respuesta de la API. Dentro del efecto, verificamos si data.results existe, lo que indica que se ha obtenido la lista de Pokémon. Luego, mapeamos cada Pokémon en data.results para hacer una petición adicional a su URL específica y obtener su información detallada. Utilizamos Promise.all para esperar a que todas las peticiones se completen y luego procesamos los datos obtenidos para crear un nuevo array saniData que contiene solo la información relevante de cada Pokémon, como su nombre, ID, tipos, sprites y movimientos con un poder de ataque aleatorio. Finalmente, actualizamos el estado pokemones con este nuevo array saniData para que pueda ser utilizado en la interfaz de usuario.
+    if (data?.results) { // Verificamos si data.results existe, lo que indica que se ha obtenido la lista de Pokémon de la API. Utilizamos el operador de encadenamiento opcional para evitar errores si data es null o undefined.
+      const plist = data.results.map((l) => fetch(l.url).then((res) => res.json())); // Mapeamos cada Pokémon en data.results para hacer una petición adicional a su URL específica (l.url) y obtener su información detallada. Utilizamos fetch para hacer la petición y luego convertimos la respuesta a formato JSON. Esto nos permite obtener información detallada de cada Pokémon, como su nombre, ID, tipos, sprites y movimientos, que luego procesaremos para mostrar en la interfaz de usuario.
+      Promise.all(plist).then((values) => { // Utilizamos Promise.all para esperar a que todas las peticiones se completen y obtener un array values que contiene la información detallada de cada Pokémon. Luego, procesamos estos datos para crear un nuevo array saniData que contiene solo la información relevante de cada Pokémon, como su nombre, ID, tipos, sprites y movimientos con un poder de ataque aleatorio. Finalmente, actualizamos el estado pokemones con este nuevo array saniData para que pueda ser utilizado en la interfaz de usuario.
+        const saniData = values.map((e) => ({ // Procesamos cada Pokémon obtenido de las peticiones para crear un nuevo objeto que contiene solo la información relevante para nuestra aplicación, como su nombre, ID, tipos, sprites y movimientos con un poder de ataque aleatorio. Esto nos permite tener un estado más limpio y manejable, con solo la información que realmente necesitamos para mostrar en la interfaz de usuario y manejar la lógica del juego.
+          name: e.name, // El nombre del Pokémon, que se obtiene de la propiedad name del objeto e, y se utiliza para mostrar el nombre del Pokémon en la interfaz de usuario, como en el componente PokeDetails y en el componente GameScreen durante las batallas.
+          id: e.id, // El ID del Pokémon, que se obtiene de la propiedad id del objeto e, y se utiliza para identificar de manera única a cada Pokémon en la lista de pokemones, así como para mostrar su ID formateado en el componente PokeDetails.
+          types: e.types, // Los tipos del Pokémon, que se obtienen de la propiedad types del objeto e, y se utilizan para mostrar los tipos del Pokémon en el componente PokeDetails, con estilos específicos para cada tipo según el objeto typeStyles.
+          sprites: e.sprites, // Los sprites del Pokémon, que se obtienen de la propiedad sprites del objeto e, y se utilizan para mostrar las imágenes del sprite frontal y trasero del Pokémon tanto en el componente PokeDetails como en el componente GameScreen durante las batallas.
+          moves: e.moves.map((m) => ({ ...m, attack: getRandomInt(20, 98) })), // Los movimientos del Pokémon, que se obtienen de la propiedad moves del objeto e, y se procesan para agregar un poder de ataque aleatorio a cada movimiento utilizando la función getRandomInt. Esto se hace para añadir un elemento de imprevisibilidad a las batallas en el componente GameScreen, ya que cada movimiento tendrá un poder de ataque diferente cada vez que se cargue la lista de Pokémon.
         }));
-        setPokemones(saniData);
+        setPokemones(saniData); // Actualizamos el estado pokemones con el nuevo array saniData que contiene solo la información relevante de cada Pokémon, lo que nos permite utilizar esta información en la interfaz de usuario para mostrar la cuadrícula de Pokémon en la pantalla principal y los detalles del Pokémon seleccionado en el componente PokeDetails, así como para manejar la lógica de las batallas en el componente GameScreen.
       });
     }
-  }, [data]);
+  }, [data]); // El segundo argumento del useEffect es un array de dependencias, en este caso [data], lo que significa que el efecto se ejecutará cada vez que la variable data cambie, lo que ocurre cuando se obtiene la respuesta de la API. Esto asegura que procesamos los datos de los Pokémon solo después de haberlos obtenido correctamente.
 
-  const handleDirection = (direction) => {
-    if (myPokeSelection) return;
-    const columnas = 4;
-    setPosition((prev) => {
-      if (direction === 'RIGHT') return prev < pokemones.length ? prev + 1 : prev;
-      if (direction === 'LEFT') return prev > 1 ? prev - 1 : prev;
-      if (direction === 'DOWN') return (prev + columnas) <= pokemones.length ? prev + columnas : prev;
-      if (direction === 'UP') return (prev - columnas) >= 1 ? prev - columnas : prev;
-      return prev;
+  const handleDirection = (direction) => { // Función para manejar las direcciones de movimiento del control direccional, que se llama cada vez que el jugador utiliza el control para moverse por la cuadrícula de Pokémon. La función recibe un argumento direction que indica la dirección del movimiento (RIGHT, LEFT, DOWN, UP) y actualiza el estado position en consecuencia para cambiar el Pokémon seleccionado en la pantalla principal. Si el jugador ya ha seleccionado un Pokémon (myPokeSelection no es null), la función no permite mover el selector para evitar cambiar la selección durante una batalla.
+    if (myPokeSelection) return; // Si el jugador ya ha seleccionado un Pokémon, no permitimos mover el selector para evitar cambiar la selección durante una batalla. Esto se hace para mantener la coherencia en la experiencia de juego, ya que una vez que el jugador ha elegido su Pokémon, no debería poder cambiarlo hasta que termine la batalla o cancele la selección.
+    const columnas = 4; // Definimos el número de columnas en la cuadrícula de Pokémon, lo que nos permite calcular cómo se mueve el selector en función de la dirección. En este caso, la cuadrícula tiene 4 columnas, por lo que al mover hacia abajo (DOWN) sumamos el número de columnas para ir al siguiente renglón, y al mover hacia arriba (UP) restamos el número de columnas para ir al renglón anterior. Esto nos ayuda a mantener la lógica de movimiento coherente con la disposición visual de los Pokémon en la pantalla principal.
+    setPosition((prev) => { // Actualizamos el estado position utilizando la función setPosition, que recibe una función de actualización que toma el valor anterior (prev) y devuelve el nuevo valor basado en la dirección del movimiento. La función verifica la dirección y actualiza position de acuerdo a las reglas de movimiento en la cuadrícula, asegurándose de no salir de los límites de la lista de Pokémon. Por ejemplo, al mover hacia la derecha (RIGHT), solo permitimos aumentar position si no excede el número total de Pokémon, y al mover hacia abajo (DOWN), solo permitimos aumentar position si no excede el número total de Pokémon al sumar el número de columnas.
+      if (direction === 'RIGHT') return prev < pokemones.length ? prev + 1 : prev; // Si la dirección es RIGHT, intentamos aumentar position en 1, pero solo si el nuevo valor no excede el número total de Pokémon en la lista. Si prev es menor que pokemones.length, devolvemos prev + 1 para mover a la derecha; de lo contrario, devolvemos prev para mantener la posición actual y evitar salir de los límites.
+      if (direction === 'LEFT') return prev > 1 ? prev - 1 : prev; // Si la dirección es LEFT, intentamos disminuir position en 1, pero solo si el nuevo valor no es menor que 1 (el primer Pokémon). Si prev es mayor que 1, devolvemos prev - 1 para mover a la izquierda; de lo contrario, devolvemos prev para mantener la posición actual y evitar salir de los límites.
+      if (direction === 'DOWN') return (prev + columnas) <= pokemones.length ? prev + columnas : prev; // Si la dirección es DOWN, intentamos aumentar position en el número de columnas para mover al siguiente renglón, pero solo si el nuevo valor no excede el número total de Pokémon en la lista. Si prev + columnas es menor o igual a pokemones.length, devolvemos prev + columnas para mover hacia abajo; de lo contrario, devolvemos prev para mantener la posición actual y evitar salir de los límites.
+      if (direction === 'UP') return (prev - columnas) >= 1 ? prev - columnas : prev; // Si la dirección es UP, intentamos disminuir position en el número de columnas para mover al renglón anterior, pero solo si el nuevo valor no es menor que 1 (el primer Pokémon). Si prev - columnas es mayor o igual a 1, devolvemos prev - columnas para mover hacia arriba; de lo contrario, devolvemos prev para mantener la posición actual y evitar salir de los límites.
+      return prev; // Si la dirección no coincide con ninguna de las opciones anteriores, devolvemos prev para mantener la posición actual sin cambios. Esto es una medida de seguridad para asegurarnos de que el estado position solo se actualice en respuesta a direcciones válidas y no se modifique por error debido a una dirección desconocida.
     });
   };
 
-  const handleSelection = (buttonName) => {
-    if (buttonName === 'A' && pokemones.length > 0 && !myPokeSelection) {
-      const selected = pokemones.find((p) => p.id === position);
-      setMyPokeSelection(selected);
-      setPcPokeSelection(pokemones[Math.floor(Math.random() * pokemones.length)]);
+  const handleSelection = (buttonName) => { // Función para manejar las acciones de selección y cancelación del control derecho, que se llama cada vez que el jugador presiona el botón A (selección) o B (cancelación). La función recibe un argumento buttonName que indica qué botón se ha presionado. Si el jugador presiona el botón A y hay Pokémon disponibles en la lista y no ha seleccionado uno previamente, la función encuentra el Pokémon correspondiente a la posición actual y lo asigna a myPokeSelection, mientras que asigna un Pokémon aleatorio a pcPokeSelection para iniciar la batalla. Si el jugador presiona el botón B, la función resetea ambas selecciones a null para permitir al jugador volver a seleccionar un Pokémon.
+    if (buttonName === 'A' && pokemones.length > 0 && !myPokeSelection) { // Si el botón presionado es A, hay Pokémon disponibles en la lista y el jugador no ha seleccionado uno previamente, procedemos a asignar las selecciones para iniciar la batalla. Esto asegura que el jugador solo pueda seleccionar un Pokémon si hay opciones disponibles y no ha hecho una selección antes, lo que mantiene la lógica del juego coherente y evita errores en la selección.
+      const selected = pokemones.find((p) => p.id === position); // Encontramos el Pokémon correspondiente a la posición actual utilizando el método find en la lista de pokemones, comparando el ID del Pokémon con la posición actual. Esto nos permite obtener el objeto del Pokémon seleccionado por el jugador, que contiene toda su información relevante para mostrar en los detalles y para usar en la batalla contra la CPU.
+      setMyPokeSelection(selected); // Asignamos el Pokémon seleccionado por el jugador al estado myPokeSelection, lo que nos permite mostrar sus detalles en el componente PokeDetails y usar su información en el componente GameScreen durante la batalla. Esto marca el inicio de la selección del Pokémon por parte del jugador y nos permite avanzar a la fase de batalla.
+      setPcPokeSelection(pokemones[Math.floor(Math.random() * pokemones.length)]); // Asignamos un Pokémon aleatorio a pcPokeSelection para representar la selección de la CPU. Utilizamos Math.random para generar un índice aleatorio dentro del rango de la lista de pokemones y obtener el Pokémon correspondiente. Esto añade un elemento de imprevisibilidad a las batallas, ya que la CPU seleccionará un Pokémon diferente cada vez que el jugador haga su selección, lo que hace que cada batalla sea única y desafiante.
     }
-    if (buttonName === 'B') {
-      setMyPokeSelection(null);
-      setPcPokeSelection(null);
+    if (buttonName === 'B') { // Si el botón presionado es B, reseteamos ambas selecciones a null para permitir al jugador volver a seleccionar un Pokémon. Esto es útil para que el jugador pueda cancelar su selección actual y elegir otro Pokémon si cambia de opinión o si desea probar diferentes combinaciones en las batallas contra la CPU.
+      setMyPokeSelection(null); // Reseteamos la selección del jugador a null, lo que nos permite mostrar la cuadrícula de Pokémon nuevamente en la pantalla principal y ocultar los detalles del Pokémon seleccionado. Esto también nos permite reiniciar el proceso de selección para que el jugador pueda elegir otro Pokémon si lo desea.
+      setPcPokeSelection(null); // Reseteamos la selección de la CPU a null, lo que nos permite ocultar los detalles del Pokémon seleccionado por la CPU en el componente GameScreen y reiniciar el proceso de selección para que la CPU pueda elegir otro Pokémon aleatorio cuando el jugador haga una nueva selección. Esto mantiene la coherencia en la experiencia de juego al permitir que tanto el jugador como la CPU puedan cambiar sus selecciones antes de iniciar una batalla.
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-200 p-4">
-      <div className="flex flex-col lg:flex-row items-center gap-10 bg-neutral-300 border-neutral-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-200 p-4"> {/* Este bloque es el contenedor principal de la aplicación, con un diseño de flexbox para centrar el contenido tanto vertical como horizontalmente, un alto mínimo de pantalla para ocupar toda la altura disponible, un fondo neutral claro para resaltar los elementos de la interfaz y padding para separar el contenido del borde de la pantalla */}
+      <div className="flex flex-col lg:flex-row items-center gap-10 bg-neutral-300 border-neutral-100">  {/* Este bloque es el contenedor de la consola y los detalles, con un diseño de flexbox que se adapta a diferentes tamaños de pantalla (columna en pantallas pequeñas y fila en pantallas grandes), alineación de los elementos al centro, un espacio entre los elementos para separarlos visualmente, un fondo neutral más claro para resaltar esta sección y un borde neutral para delimitar el área de la consola y los detalles */ }
         
         {/* CONTENEDOR 1: LA CONSOLA */}
-        <div className="flex items-center shadow-2xl rounded-[3rem] overflow-hidden bg-gray-900 border-[5px] border-gray-800">
-          <LeftControl handleDirection={handleDirection} />
-          <div className="relative">
-            {myPokeSelection && pcPokeSelection ? (
-              <GameScreen player={myPokeSelection} cpu={pcPokeSelection} />
+        <div className="flex items-center shadow-2xl rounded-[3rem] overflow-hidden bg-gray-900 border-[5px] border-gray-800"> {/* Este bloque es el contenedor de la consola, con un diseño de flexbox para alinear los controles y la pantalla, una sombra para darle profundidad, bordes redondeados para darle un aspecto más suave, overflow-hidden para ocultar cualquier contenido que se salga de los bordes redondeados, un fondo gris oscuro para resaltar la pantalla y los controles, y un borde gris para delimitar el área de la consola */}
+          <LeftControl handleDirection={handleDirection} /> {/* Este componente es el control direccional izquierdo de la consola, que se encarga de manejar las direcciones de movimiento para seleccionar los Pokémon en la pantalla. Le pasamos la función handleDirection como prop para que pueda actualizar el estado position en el componente principal App.jsx cada vez que el jugador utilice el control para moverse por la cuadrícula de Pokémon. Esto permite que el selector se mueva de acuerdo a las direcciones indicadas por el jugador, y que se actualice la selección del Pokémon en la pantalla principal y en los detalles. */}
+          <div className="relative">  {/* Este bloque es el contenedor de la pantalla principal de la consola, con una posición relativa para permitir posicionar elementos dentro de ella de manera absoluta si es necesario. Dentro de este bloque, mostramos el componente GameScreen si el jugador ha seleccionado un Pokémon y la CPU también ha hecho su selección, lo que indica que estamos en la fase de batalla. Si no se han hecho ambas selecciones, mostramos el componente Screen, que es la pantalla principal donde se muestra la cuadrícula de Pokémon disponibles para seleccionar, pasando los pokemones y la posición actual como props para que pueda mostrar la información correcta en la interfaz. */}
+            {myPokeSelection && pcPokeSelection ? ( // Si el jugador ha seleccionado un Pokémon (myPokeSelection no es null) y la CPU también ha hecho su selección (pcPokeSelection no es null), mostramos el componente GameScreen, que es la pantalla de batalla donde se enfrentan los Pokémon seleccionados por el jugador y la CPU. Le pasamos las selecciones del jugador y la CPU como props para que pueda mostrar los detalles de ambos Pokémon y manejar la lógica de la batalla entre ellos. Esto marca el inicio de la fase de batalla en la experiencia de juego, donde el jugador puede ver cómo se enfrentan su Pokémon contra el Pokémon seleccionado por la CPU. */}
+              <GameScreen player={myPokeSelection} cpu={pcPokeSelection} /> // Si ambas selecciones están hechas, renderizamos el componente GameScreen, pasando las selecciones del jugador y la CPU como props para mostrar los detalles de ambos Pokémon y manejar la lógica de la batalla entre ellos. Esto permite que el jugador vea cómo se enfrentan su Pokémon contra el Pokémon seleccionado por la CPU en una experiencia de juego interactiva.
             ) : (
-              <Screen pokemones={pokemones} position={position} />
+              <Screen pokemones={pokemones} position={position} /> /* Si no se han hecho ambas selecciones, renderizamos el componente Screen, que es la pantalla principal donde se muestra la cuadrícula de Pokémon disponibles para seleccionar. Le pasamos la lista de pokemones y la posición actual como props para que pueda mostrar la información correcta en la interfaz, permitiendo al jugador navegar por la cuadrícula y elegir su Pokémon para iniciar la batalla contra la CPU. Esto es lo que el jugador verá inicialmente al cargar la aplicación, y es donde comenzará su experiencia de selección de Pokémon. */
             )}
           </div>
-          <RightControl handleSelection={handleSelection} />
+          <RightControl handleSelection={handleSelection} /> {/* Este componente es el control derecho de la consola, que se encarga de manejar las acciones de selección y cancelación para elegir el Pokémon y iniciar la batalla. Le pasamos la función handleSelection como prop para que pueda actualizar los estados myPokeSelection y pcPokeSelection en el componente principal App.jsx cada vez que el jugador presione el botón A (selección) o B (cancelación). Esto permite que el jugador seleccione su Pokémon, inicie la batalla contra la CPU, o cancele su selección para volver a elegir otro Pokémon si lo desea. */}
         </div>
 
         {/* CONTENEDOR 2: DETALLES */}
-        {!myPokeSelection && (
-          <PokeDetails actual={pokemones.filter(p => p.id === position)} />
+        {!myPokeSelection && ( // Si el jugador no ha seleccionado un Pokémon (myPokeSelection es null), mostramos el componente PokeDetails con la información del Pokémon correspondiente a la posición actual en la cuadrícula. Filtramos la lista de pokemones para encontrar el Pokémon cuyo ID coincide con la posición actual, y pasamos ese Pokémon como prop al componente PokeDetails para mostrar sus detalles en la interfaz. Esto permite que el jugador vea los detalles del Pokémon que está actualmente seleccionado en la cuadrícula, incluso antes de hacer una selección definitiva para la batalla contra la CPU. */}
+          <PokeDetails actual={pokemones.filter(p => p.id === position)} /> // Si el jugador no ha seleccionado un Pokémon, renderizamos el componente PokeDetails, pasando como prop actual el resultado de filtrar la lista de pokemones para encontrar el Pokémon cuyo ID coincide con la posición actual. Esto permite que el jugador vea los detalles del Pokémon que está actualmente seleccionado en la cuadrícula, lo que puede ayudarle a tomar una decisión informada sobre qué Pokémon elegir para la batalla contra la CPU.
         )}
       </div>
     </div>
   );
 }
 
-export default App;
+export default App; /* Exportamos el componente principal App.jsx para que pueda ser utilizado en otros archivos de la aplicación, como index.js, donde se renderiza el componente App en el DOM. Esto es necesario para que la aplicación funcione correctamente y se muestre en la pantalla del usuario. */

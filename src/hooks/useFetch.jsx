@@ -1,35 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; /* Importamos los hooks useEffect y useState de React para manejar el estado y los efectos secundarios en nuestro hook personalizado useFetch. useState nos permite crear estados para almacenar los datos obtenidos, el estado de carga y los errores, mientras que useEffect nos permite ejecutar la función de obtención de datos cada vez que la URL cambia, asegurando que siempre tengamos la información más actualizada según la URL proporcionada. */
 
-const useFetch = (url) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const useFetch = (url) => { /* Este es un hook personalizado llamado useFetch que recibe una URL como argumento. Este hook se encarga de realizar una solicitud HTTP a la URL proporcionada, manejar el estado de carga, almacenar los datos obtenidos y capturar cualquier error que pueda ocurrir durante la solicitud. El hook devuelve un objeto con las propiedades data, loading y error para que los componentes que lo utilicen puedan acceder a esta información y renderizar la interfaz de usuario en consecuencia. Esto es útil para abstraer la lógica de obtención de datos y manejo de estados relacionados con las solicitudes HTTP, permitiendo que los componentes sean más limpios y enfocados en la presentación de la información. */
+  const [data, setData] = useState([]); /* Creamos un estado llamado data para almacenar los datos obtenidos de la solicitud HTTP. Inicialmente, este estado se establece como un array vacío, lo que indica que no hay datos disponibles hasta que se realice la solicitud y se obtengan los resultados. Este estado se actualizará con la respuesta de la solicitud HTTP una vez que se complete exitosamente, permitiendo que los componentes que utilicen este hook puedan acceder a los datos obtenidos y renderizar la información en la interfaz de usuario. */
+  const [loading, setLoading] = useState(false); /* Creamos un estado llamado loading para indicar si la solicitud HTTP está en proceso de carga. Inicialmente, este estado se establece como false, lo que indica que no se está cargando nada. Cuando se inicia la solicitud HTTP, este estado se establece en true para indicar que la carga está en progreso, y una vez que la solicitud se completa (ya sea exitosamente o con error), este estado se vuelve a establecer en false para indicar que la carga ha finalizado. Esto permite que los componentes que utilicen este hook puedan mostrar indicadores de carga o mensajes apropiados mientras se espera la respuesta de la solicitud HTTP. */
+  const [error, setError] = useState(null); /* Creamos un estado llamado error para almacenar cualquier error que pueda ocurrir durante la solicitud HTTP. Inicialmente, este estado se establece como null, lo que indica que no hay errores. Si ocurre un error durante la solicitud (por ejemplo, si la respuesta no es exitosa o si hay un problema de red), este estado se actualizará con el objeto de error correspondiente, lo que permitirá a los componentes que utilicen este hook mostrar mensajes de error o manejar la situación de manera adecuada en la interfaz de usuario. */
 
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(res.status);
+  useEffect(() => { /* Utilizamos el hook useEffect para ejecutar la función de obtención de datos cada vez que la URL proporcionada cambie. Esto asegura que siempre tengamos la información más actualizada según la URL que se le pase al hook. Dentro del useEffect, definimos una función asincrónica llamada getData que se encarga de realizar la solicitud HTTP, manejar el estado de carga, almacenar los datos obtenidos y capturar cualquier error que pueda ocurrir durante la solicitud. Luego, llamamos a esta función para iniciar el proceso de obtención de datos. El segundo argumento del useEffect es un array de dependencias que contiene la URL, lo que significa que el efecto se ejecutará cada vez que la URL cambie, asegurando que los datos se actualicen correctamente en función de la nueva URL. */
+    const getData = async () => {  // Esta función asincrónica se encarga de realizar la solicitud HTTP a la URL proporcionada, manejar el estado de carga, almacenar los datos obtenidos y capturar cualquier error que pueda ocurrir durante la solicitud. Primero, establece el estado de carga en true para indicar que la solicitud está en progreso. Luego, intenta realizar la solicitud utilizando fetch y verifica si la respuesta es exitosa. Si la respuesta no es exitosa, lanza un error con el código de estado. Si la respuesta es exitosa, convierte la respuesta a formato JSON y actualiza el estado de data con los datos obtenidos. Si ocurre algún error durante este proceso, captura el error y actualiza el estado de error con el objeto de error correspondiente. Finalmente, independientemente del resultado (éxito o error), establece el estado de carga en false para indicar que la solicitud ha finalizado. Esto permite que los componentes que utilicen este hook puedan manejar adecuadamente los estados de carga, datos y errores en su interfaz de usuario. */
+      setLoading(true); // Establece el estado de carga en true para indicar que la solicitud HTTP está en progreso. Esto es útil para mostrar indicadores de carga o mensajes apropiados en la interfaz de usuario mientras se espera la respuesta de la solicitud.
+      try { // Inicia un bloque try-catch para manejar cualquier error que pueda ocurrir durante la solicitud HTTP. Esto es importante para garantizar que la aplicación no se bloquee y pueda manejar los errores de manera adecuada, mostrando mensajes de error o tomando otras acciones según sea necesario.
+        const res = await fetch(url); // Realiza la solicitud HTTP a la URL proporcionada utilizando la función fetch, que devuelve una promesa que se resuelve con la respuesta de la solicitud. Utilizamos await para esperar a que la promesa se resuelva antes de continuar con el siguiente paso en el proceso de obtención de datos.
+        if (!res.ok) { // Verifica si la respuesta de la solicitud HTTP no es exitosa (es decir, si el código de estado no está en el rango 200-299). Si la respuesta no es exitosa, lanza un error con el código de estado para que pueda ser capturado en el bloque catch y manejado adecuadamente en la interfaz de usuario.
+          throw new Error(res.status); // Lanza un error con el código de estado de la respuesta HTTP si la respuesta no es exitosa. Esto permite que el bloque catch capture este error y actualice el estado de error con el objeto de error correspondiente, lo que a su vez permite a los componentes que utilicen este hook mostrar mensajes de error o manejar la situación de manera adecuada en la interfaz de usuario.
         }
-        const response = await res.json();
-        setData(response);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
+        const response = await res.json(); // Si la respuesta es exitosa, convierte la respuesta a formato JSON utilizando el método json() de la respuesta. Esto devuelve una promesa que se resuelve con los datos obtenidos en formato JSON, lo que permite que podamos trabajar con estos datos en JavaScript y actualizar el estado de data con esta información.
+        setData(response); // Actualiza el estado de data con los datos obtenidos de la solicitud HTTP. Esto permite que los componentes que utilicen este hook puedan acceder a estos datos y renderizar la información en la interfaz de usuario en consecuencia.
+      } catch (error) { // Captura cualquier error que pueda ocurrir durante el proceso de obtención de datos, ya sea por una respuesta no exitosa o por problemas de red u otros errores inesperados. Al capturar el error, actualiza el estado de error con el objeto de error correspondiente, lo que permite a los componentes que utilicen este hook mostrar mensajes de error o manejar la situación de manera adecuada en la interfaz de usuario.
+        setError(error); // Actualiza el estado de error con el objeto de error capturado en el bloque catch. Esto permite que los componentes que utilicen este hook puedan mostrar mensajes de error o manejar la situación de manera adecuada en la interfaz de usuario, informando al usuario sobre cualquier problema que haya ocurrido durante la solicitud HTTP.
+      } finally {   // Independientemente del resultado de la solicitud (éxito o error), el bloque finally se ejecuta para establecer el estado de carga en false, indicando que la solicitud ha finalizado. Esto es importante para garantizar que los indicadores de carga o mensajes relacionados con la carga se actualicen correctamente en la interfaz de usuario, incluso si ocurre un error durante la solicitud.
+        setLoading(false); // Establece el estado de carga en false para indicar que la solicitud HTTP ha finalizado, independientemente de si fue exitosa o si ocurrió un error. Esto permite que los componentes que utilicen este hook puedan actualizar los indicadores de carga o mensajes relacionados con la carga en la interfaz de usuario de manera adecuada, asegurando una experiencia de usuario coherente y sin bloqueos.
       }
     };
 
-    getData();
-  }, [url]);
+    getData(); // Llama a la función getData para iniciar el proceso de obtención de datos cada vez que la URL cambie. Esto asegura que siempre tengamos la información más actualizada según la URL proporcionada, permitiendo que los componentes que utilicen este hook puedan renderizar la información correcta en la interfaz de usuario en función de la nueva URL.
+  }, [url]); // El segundo argumento del useEffect es un array de dependencias que contiene la URL, lo que significa que el efecto se ejecutará cada vez que la URL cambie. Esto asegura que los datos se actualicen correctamente en función de la nueva URL proporcionada al hook, permitiendo que los componentes que utilicen este hook puedan renderizar la información correcta en la interfaz de usuario en función de la nueva URL.
 
-  return {
+  return { // El hook devuelve un objeto con las propiedades data, loading y error para que los componentes que lo utilicen puedan acceder a esta información y renderizar la interfaz de usuario en consecuencia. Esto es útil para abstraer la lógica de obtención de datos y manejo de estados relacionados con las solicitudes HTTP, permitiendo que los componentes sean más limpios y enfocados en la presentación de la información.
     data,
     loading,
     error,
   };
 };
 
-export default useFetch;
+export default useFetch; /* Exportamos el hook personalizado useFetch para que pueda ser utilizado en otros componentes de la aplicación, como en el componente principal App.jsx donde se realiza la solicitud para obtener la lista de Pokémon desde la API. Al exportar este hook, podemos importarlo y utilizarlo en cualquier componente que necesite realizar solicitudes HTTP y manejar los estados relacionados con la carga, los datos obtenidos y los errores, lo que facilita la reutilización de la lógica de obtención de datos en toda la aplicación. Esto es esencial para mantener un código limpio y organizado, permitiendo que los componentes se centren en la presentación de la información mientras el hook se encarga de la lógica de obtención de datos. */
